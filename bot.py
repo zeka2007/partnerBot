@@ -57,8 +57,8 @@ async def on_raw_reaction_add(payload):
 
         emb = discord.Embed(title = f'{client.user.name} - бот для сервера {member.guild.name}', color = discord.Color.green())
         emb.set_thumbnail(url = client.user.avatar_url)
-        emb.add_field(name = 'В чём смысл этого бота?', value = 'Этот бот помогает автоматизировать процессы на сервере и помочь новым пользователем сделать первые шаги на нём.')
-        emb.add_field(name = 'Преминение:', value = 'Для создателей серверов данный бот поможет опубликовать объявление, а для пользователей Discord - возможность оценить чей-нибудь проект.')
+        emb.add_field(name = 'В чём смысл этого бота?', value = 'Этот бот помогает автоматизировать процессы на сервере и помочь новым пользователям сделать первые шаги на нём.')
+        emb.add_field(name = 'Применение:', value = 'Для создателей серверов данный бот поможет опубликовать объявление, а для пользователей Discord - возможность оценить чей-нибудь проект.')
         emb.add_field(name = 'Команды для Администраторов:', value = 'appealAccept, appealNotAccepted')
         emb.set_footer(text = f'Разработчики: {dev1.name} и {dev2.name}', icon_url = client.user.avatar_url)
         await member.send(embed = emb)
