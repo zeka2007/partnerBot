@@ -14,13 +14,13 @@ client.remove_command('help')
 @client.event
 async def on_ready():
     print('ready')
-# @client.event
-# async def on_member_join(member):
-#     channel = client.get_channel(779329178285506590)
-#     info_channel = client.get_channel(761648095234621462)
-#     rules_channel = client.get_channel(778136828204679199)
-#     emb = discord.Embed(description = f"{member}, тебя приветствует сервер {member.guild.name}.\nОбязательно ознакомься с {info_channel.mention} и {rules_channel.mention}", color = discord.Color.green())
-#     await channel.send(embed = emb)
+@client.event
+async def on_member_join(member):
+    channel = client.get_channel(779329178285506590)
+    info_channel = client.get_channel(761648095234621462)
+    rules_channel = client.get_channel(778136828204679199)
+    emb = discord.Embed(description = f"{member}, тебя приветствует сервер {member.guild.name}.\nОбязательно ознакомься с {info_channel.mention} и {rules_channel.mention}", color = discord.Color.green())
+    await channel.send(embed = emb)
 @client.event
 async def on_message(message):
     await client.process_commands(message)
@@ -44,7 +44,17 @@ async def on_raw_reaction_add(payload):
     #     return
     if member == client.user:
         return
-    if payload.emoji.name == '⚠️':  # или payload.emoji.name == "✔" для unicode-эмодзей
+    if payload.emoji.name == '⚠️':
+        alarm_channel = client.get_channel(777962537631088720)
+        channel = client.get_channel(payload.channel_id)
+        async for message in channel.history(limit = None):
+            if message.id == payload.message_id:
+                user = client.get_user(payload.user_id)
+                emb = discord.Embed(title = "Отправлена жалоба!", color = discord.Color.red())
+                emb.add_field(name = "Текст сообщения:", value = message.content)
+                emb.set_footer(text = f"Жалобу подал: {user}", icon_url = user.avatar_url)
+                await alarm_channel.send( embed = emb)
+
         role = discord.utils.get(member.guild.roles, id = 778610047575654420)
         emb = discord.Embed(title = '{0.member}, вы отправили жалобу на один из серверов. Для её составления обратитесь к инструкции на сервере.\nid канала: {0.channel_id}'.format(payload),
         color = discord.Color.green())
@@ -57,8 +67,8 @@ async def on_raw_reaction_add(payload):
 
         emb = discord.Embed(title = f'{client.user.name} - бот для сервера {member.guild.name}', color = discord.Color.green())
         emb.set_thumbnail(url = client.user.avatar_url)
-        emb.add_field(name = 'В чём смысл этого бота?', value = 'Этот бот помогает автоматизировать процессы на сервере и помочь новым пользователям сделать первые шаги на нём.')
-        emb.add_field(name = 'Применение:', value = 'Для создателей серверов данный бот поможет опубликовать объявление, а для пользователей Discord - возможность оценить чей-нибудь проект.')
+        emb.add_field(name = 'В чём смысл этого бота?', value = 'Этот бот помогает автоматизировать процессы на сервере и помочь новым пользователем сделать первые шаги на нём.')
+        emb.add_field(name = 'Преминение:', value = 'Для создателей серверов данный бот поможет опубликовать объявление, а для пользователей Discord - возможность оценить чей-нибудь проект.')
         emb.add_field(name = 'Команды для Администраторов:', value = 'appealAccept, appealNotAccepted')
         emb.set_footer(text = f'Разработчики: {dev1.name} и {dev2.name}', icon_url = client.user.avatar_url)
         await member.send(embed = emb)
