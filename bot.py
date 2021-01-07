@@ -14,13 +14,13 @@ client.remove_command('help')
 @client.event
 async def on_ready():
     print('ready')
-@client.event
-async def on_member_join(member):
-    channel = client.get_channel(779329178285506590)
-    info_channel = client.get_channel(761648095234621462)
-    rules_channel = client.get_channel(778136828204679199)
-    emb = discord.Embed(description = f"{member}, тебя приветствует сервер {member.guild.name}.\nОбязательно ознакомься с {info_channel.mention} и {rules_channel.mention}", color = discord.Color.green())
-    await channel.send(embed = emb)
+# @client.event
+# async def on_member_join(member):
+#     channel = client.get_channel(779329178285506590)
+#     info_channel = client.get_channel(761648095234621462)
+#     rules_channel = client.get_channel(778136828204679199)
+#     emb = discord.Embed(description = f"{member}, тебя приветствует сервер {member.guild.name}.\nОбязательно ознакомься с {info_channel.mention} и {rules_channel.mention}", color = discord.Color.green())
+#     await channel.send(embed = emb)
 @client.event
 async def on_message(message):
     await client.process_commands(message)
