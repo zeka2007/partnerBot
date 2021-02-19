@@ -1,4 +1,6 @@
+import os
 setting = {
+    'TOKEN': os.environ.get('BOT_TOKEN')
     'PREFIX': '.',
     'channels': [777962327357653022,
         778141789500080148,
