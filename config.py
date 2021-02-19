@@ -1,5 +1,4 @@
 setting = {
-    'TOKEN': 'Nzc3OTc3Mzk2NDM0NTY3MjI4.X7LR6Q.B-KQ2aPiLIetsJKqfM3q1UBo2-g',
     'PREFIX': '.',
     'channels': [777962327357653022,
         778141789500080148,
