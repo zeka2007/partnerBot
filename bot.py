@@ -3,11 +3,9 @@ from discord.ext import commands
 from config import setting
 
 client = commands.Bot(command_prefix = setting['PREFIX'],  intents = discord.Intents.all())
-reactionchannel = [777962327357653022,
-    778141789500080148,
-    778142046954455041,
-    778142261476458516,
-    778142496856866817]
+reactionchannel = setting['channels']
+guild = client.get_guild(761648095234621460)
+
 client.remove_command('help')
 
 
@@ -16,11 +14,11 @@ async def on_ready():
     print('ready')
 # @client.event
 # async def on_member_join(member):
-#     channel = client.get_channel(779329178285506590)
-#     info_channel = client.get_channel(761648095234621462)
-#     rules_channel = client.get_channel(778136828204679199)
-#     emb = discord.Embed(description = f"{member}, тебя приветствует сервер {member.guild.name}.\nОбязательно ознакомься с {info_channel.mention} и {rules_channel.mention}", color = discord.Color.green())
-#     await channel.send(embed = emb)
+    # channel = client.get_channel(779329178285506590)
+    # info_channel = client.get_channel(761648095234621462)
+    # rules_channel = client.get_channel(778136828204679199)
+    # emb = discord.Embed(description = f"{member}, тебя приветствует сервер {member.guild.name}.\nОбязательно ознакомься с {info_channel.mention} и {rules_channel.mention}", color = discord.Color.green())
+    # await channel.send(embed = emb)
 @client.event
 async def on_message(message):
     await client.process_commands(message)
@@ -37,9 +35,14 @@ async def on_message(message):
             await message.add_reaction('👎')
             await message.add_reaction('⚠️')
             await message.author.add_roles(guild_user_role)
+
+
 @client.event
 async def on_raw_reaction_add(payload):
+    guild = client.get_guild(761648095234621460)
+
     member = payload.member
+    pchannel = guild.get_channel(payload.channel_id)
     # if not payload.channel_id in reactionchannel:  # ID сообщения на которое нужно ставить реакции
     #     return
     if member == client.user:
@@ -72,6 +75,44 @@ async def on_raw_reaction_add(payload):
         emb.add_field(name = 'Команды для Администраторов:', value = 'appealAccept, appealNotAccepted')
         emb.set_footer(text = f'Разработчики: {dev1.name} и {dev2.name}', icon_url = client.user.avatar_url)
         await member.send(embed = emb)
+
+
+    check_channel = guild.get_channel(812370126388592680)
+    emoji = payload.emoji
+    if pchannel == check_channel:
+        if emoji.name == '❌':
+            partner_channel = guild.get_channel(812045258572955748)
+            message = await pchannel.fetch_message(payload.message_id)
+            ids = []
+            async for message in pchannel.history(limit = None):
+                ids.append(message.id)
+
+
+            message_p = await pchannel.fetch_message(ids[ids.index(message.id)-1])
+
+            m = await partner_channel.fetch_message(int(message.content))
+            # print(message_p.content)
+            # print(message.content)
+            # print(m.content)
+            await message_p.delete()
+            await message.delete()
+            await m.delete()
+        elif emoji.name == '✅':
+            partner_channel = guild.get_channel(812045258572955748)
+            message = await pchannel.fetch_message(payload.message_id)
+            ids = []
+            async for message in pchannel.history(limit = None):
+                ids.append(message.id)
+
+
+            message_p = await pchannel.fetch_message(ids[ids.index(message.id)-1])
+
+            m = await partner_channel.fetch_message(int(message.content))
+            # print(message_p.content)
+            # print(message.content)
+            # print(m.content)
+            await message_p.delete()
+            await message.delete()
 @client.event
 async def on_raw_reaction_remove(payload):
     member = await (await client.fetch_guild(payload.guild_id)).fetch_member(payload.user_id)
@@ -100,4 +141,60 @@ async def appealNotAccepted(ctx, member: discord.Member):
         await member.remove_roles()
     else:
         await ctx.send('Участник {} не подавал жалобу.'.format(member))
+
+@client.command()
+@commands.dm_only()
+async def partner(ctx):
+    await ctx.send('Отправьте в канал для партнёров на вашем сервере вот это объявление:')
+    await ctx.send("""‧₊˚✧ *·˚ ・゜+.  ✦ . ⁺  . ‧˖˚ ‧₊˚✧ . ⁺ ₊ ・+.  ✦ . ⁺ . ₊ ‧₊˚✧ *·˚
+**⠀⠀⠀⠀Отзывы о серверах и партнёрствах⠀⠀⠀⠀**
+‧₊˚✧ *·˚ ・゜+.  ✦ . ⁺  . ‧˖˚ ‧₊˚✧ . ⁺ ₊ ・+.  ✦ . ⁺ . ₊ ‧₊˚✧ *·˚
+
+**Ищите себе партнёров? Наша дипломатичная площадка предоставляет огромный ассортимент партнёров!**
+
+๑✅꒱・система "галочек"
+๑\🎗️꒱・администрация 24/7
+๑\🤝꒱・партнёрская программа
+๑\🍡꒱・приятный дизайн
+๑\☄️꒱・постоянные обновления
+
+**Чего же вы ждёте переходите на новый уровень партнёрства прямо сейчас!**
+
+๑\📌꒱・Гифка: https://cdn.discordapp.com/attachments/758679835647541251/812053288148140032/ezgif-4-5cb50d59a33c.gif
+๑\🛎・Пинг:  @everyone @here
+๑\📎・Ссылка: https://discord.gg/Q8h4VESMu3""")
+    guild = client.get_guild(761648095234621460)
+
+
+    channel = ctx.channel
+    partner_channel = guild.get_channel(812045258572955748)
+    check_img_channel = guild.get_channel(812370126388592680)
+    await channel.send('После этого отправьте "готово".')
+
+    def check(m):
+        return m.content == 'готово' and m.channel == channel
+    def check_img(m):
+        return m.attachments != [] and m.channel == channel
+    def check_desc(m):
+        if not m.content.find('https://discord.gg/') == -1:
+            return m.channel == channel
+        else:
+            return False
+    msg = await client.wait_for('message', check=check)
+    await ctx.send(f'теперь отправьте описание вашего сервера ')
+    msg = await client.wait_for('message', check = check_desc)
+    await ctx.send('Отправьте скриншот с нашим объявлением. Обратите внимание, что все фотографии проверяются модераторами.')
+    message = await client.wait_for('message', check = check_img)
+    partner_message = await partner_channel.send(msg.content)
+    await check_img_channel.send(partner_message.id)
+    check_message = await check_img_channel.send(message.attachments[0].url)
+    await check_message.add_reaction('✅')
+    await check_message.add_reaction('❌')
+
+    await ctx.send('Ваше объявление было отправлено!')
+
+    member = discord.utils.get(guild.members, id = msg.author.id)
+    role = guild.get_role(812349807070412832)
+    await member.add_roles(role)
+
 client.run(setting['TOKEN'])
