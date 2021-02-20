@@ -11,6 +11,8 @@ client.remove_command('help')
 
 @client.event
 async def on_ready():
+    activity = discord.Activity(name='.partner в ЛС | .help', type=discord.ActivityType.listening)
+    await client.change_presence(activity = activity)
     print('ready')
 # @client.event
 # async def on_member_join(member):
