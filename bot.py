@@ -72,7 +72,8 @@ async def on_raw_reaction_add(payload):
         emb.set_thumbnail(url = client.user.avatar_url)
         emb.add_field(name = 'В чём смысл этого бота?', value = 'Этот бот помогает автоматизировать процессы на сервере и помочь новым пользователем сделать первые шаги на нём.')
         emb.add_field(name = 'Преминение:', value = 'Для создателей серверов данный бот поможет опубликовать объявление, а для пользователей Discord - возможность оценить чей-нибудь проект.')
-        emb.add_field(name = 'Команды для Администраторов:', value = 'appealAccept, appealNotAccepted')
+        emb.add_field(name = 'Команды для Администраторов:', value = '.appealAccept, .appealNotAccepted')
+        emb.add_field(name = 'Команды для Пользователей:', value = '.help, .partner')
         emb.set_footer(text = f'Разработчики: {dev1.name} и {dev2.name}', icon_url = client.user.avatar_url)
         await member.send(embed = emb)
 
@@ -197,4 +198,21 @@ async def partner(ctx):
     role = guild.get_role(812349807070412832)
     await member.add_roles(role)
 
+@client.command()
+async def help(ctx):
+    member = ctx.author
+    channel = ctx.channel
+
+    dev1 = client.get_user(551810310747717633)
+    dev2 = client.get_user(615595496525791295)
+
+    emb = discord.Embed(title = f'{client.user.name} - бот для сервера {member.guild.name}', color = discord.Color.green())
+    emb.set_thumbnail(url = client.user.avatar_url)
+    emb.add_field(name = 'В чём смысл этого бота?', value = 'Этот бот помогает автоматизировать процессы на сервере и помочь новым пользователем сделать первые шаги на нём.')
+    emb.add_field(name = 'Преминение:', value = 'Для создателей серверов данный бот поможет опубликовать объявление, а для пользователей Discord - возможность оценить чей-нибудь проект.')
+    emb.add_field(name = 'Команды для Администраторов:', value = '.appealAccept, .appealNotAccepted')
+    emb.add_field(name = 'Команды для Пользователей:', value = '.help, .partner')
+    emb.set_footer(text = f'Разработчики: {dev1.name} и {dev2.name}', icon_url = client.user.avatar_url)
+    await member.send(embed = emb)
+    await channel.send('Я отправил инструкцию Вам в ЛС.')
 client.run(setting['TOKEN'])
